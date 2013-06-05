@@ -11,6 +11,12 @@ if exists('&relativenumber')
   auto WinLeave,FocusLost * setlocal number
   augroup END
 endif
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
 " Do an incremental search
 set incsearch
 set hlsearch
@@ -57,10 +63,6 @@ autocmd BufRead *.rb set softtabstop=2
 autocmd BufRead *.rb set shiftwidth=2
 " Clojure
 autocmd BufRead *.clj,*.cljs setf clojure
-" Highlight extra whitespace
-:match Search /\%(\_^\s*\)\@<=\%(\%1v\|\%5v\|\%9v\)\s/
-:match Search /\S\zs[\t ]\+\%#\@!$/
-call matchadd('Error', '')
 " Wrap visual selectiosn with chars
 vnoremap ( "zdi(<C-R>z)<ESC>
 vnoremap { "zdi{<C-R>z}<ESC>
@@ -139,8 +141,7 @@ let g:ctrlp_prompt_mappings = {
 run! plugin/*.vim
 
 " ==== Vundle
-"git clone http://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/vundle/
 call vundle#rc()
 filetype plugin indent on     " required!by Vundle
 Bundle 'Lokaltog/vim-powerline'
@@ -161,6 +162,7 @@ Bundle "garbas/vim-snipmate"
 Bundle 'rcyrus/snipmate-snippets-rubymotion'
 Bundle 'mhinz/vim-startify'
 Bundle 'justinxreese/vim-detailed'
+Bundle 'vim-scripts/bad-whitespace'
 "" Colors
 set background=dark
 colorscheme dandelion
