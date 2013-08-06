@@ -25,7 +25,7 @@ if &term == "xterm-color"
   fixdel
 endif
 set t_Co=256
-set noswapfile
+set directory=~/.vim/swap//,/tmp/vim-swap//,/tmp//
 
 " ==== Controls
 let mapleader = ","
@@ -33,7 +33,7 @@ set mouse=n
 " Find the cursor
 hi CursorLine ctermbg=white ctermfg=NONE guibg=white guifg=none
 hi CursorColumn ctermbg=white ctermfg=NONE guibg=white guifg=none
-nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
+nnoremap <Leader>C :set cursorline! cursorcolumn!<CR>
 " Escape with jk mashing
 inoremap jk <Esc>
 inoremap kj <Esc>
@@ -95,6 +95,9 @@ if has("user_commands")
     command! -bang QA qa<bang>
     command! -bang Qa qa<bang>
 endif
+
+" Check for file changes
+au CursorHold * checktime
 
 " === Programming things
 " Syntax checks
@@ -166,6 +169,7 @@ Bundle 'rcyrus/snipmate-snippets-rubymotion'
 Bundle 'mhinz/vim-startify'
 Bundle 'justinxreese/vim-detailed'
 Bundle 'vim-scripts/bad-whitespace'
+Bundle 'scrooloose/nerdcommenter'
 "" Colors
 set background=dark
 colorscheme dandelion
@@ -178,7 +182,6 @@ ia rpry require 'pry'; binding.pry
 function! RunTests(filename)
 " Write the file and run tests for the given filename
   :w
-  :silent !echo;echo;echo;echo;echo
   exec ":!bundle exec rspec " . a:filename
 endfunction
 
@@ -188,6 +191,7 @@ function! SetTestFile()
 endfunction
 
 function! RunTestFile(...)
+  :silent !echo;echo;echo "Running test file"
   if a:0
     let command_suffix = a:1
   else
@@ -207,21 +211,30 @@ function! RunTestFile(...)
 endfunction
 
 function! RunNearestTest()
+  :silent !echo;echo;echo;echo;echo;echo "Running nearest test"
   let spec_line_number = line('.')
   call RunTestFile(":" . spec_line_number)
 endfunction
 
 function! RunWip(...)
   :w
-  :silent !echo;echo;echo;echo;echo
+  :silent !echo;echo;echo;echo;echo; echo "Running wip for the project"
   exec ":!bundle exec rspec -t @wip"
 endfunction
 
+function! RunWipFile(...)
+  :w
+  :silent !echo;echo;echo;echo;echo; echo "Running wip in just one file"
+  exec ":!bundle exec rspec -t @wip %"
+endfunction
+
+"run the wip in this file
+map <leader>wf :call RunWipFile()<cr>
 "run feature file
-map <leader>f :call RunWip()<cr>
+map <leader>w :call RunWip()<cr>
 "run spec for current file
-map <leader>t :call RunTestFile()<cr>
+map <leader>f :call RunTestFile()<cr>
 "run spec for what is under cursor
-map <leader>T :call RunNearestTest()<cr>
+map <leader>t :call RunNearestTest()<cr>
 "run spec for entire app
 map <leader>a :call RunTests('spec')<cr>
