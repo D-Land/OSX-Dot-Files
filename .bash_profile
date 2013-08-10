@@ -1,4 +1,4 @@
-# Settings for all shells
+#Settings for all shells
 
 #Environment variables
 export EDITOR=vim
@@ -8,11 +8,9 @@ export CVS_RSH=ssh
 export LESS="-RM"
 export NODE_PATH=/usr/local/lib/node
 
-export PATH=$HOME/bin:/usr/local/share/npm/bin:/usr/local/share/python:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export PATH=$HOME/bin:/usr/local/share/npm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 source /usr/local/opt/chruby/share/chruby/chruby.sh
-chruby 1.9.3
-
 
 # Settings for interactive shells
 
@@ -103,7 +101,7 @@ prompt() {
   else
     driver="${RED}NO DRIVER"
   fi
-  PS1="${YELLOW}\d \@ ${GREEN}\u@\h ${branch:+$LIGHT_BLUE$branch }$driver ${CYAN}\w${GRAY}
+  PS1="${YELLOW}\d \@ ${GREEN}\u@\h ${branch:+$LIGHT_BLUE$branch }${CYAN}\w${GRAY}
 $ "
 }
 PROMPT_COMMAND=prompt
@@ -131,11 +129,5 @@ else
   complete -D -F _completion_load
 fi
 
-# Pair-programming "driver" functions
-. $dotfiles/driver.bash
-
-alias me=driver
-driver load
-
 # Workaround for broken chruby
-chruby 1.9.3p392
+chruby 2.0.0-p247
