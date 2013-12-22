@@ -36,17 +36,24 @@ source /usr/local/opt/chruby/share/chruby/auto.sh
 alias ll='ls -lahG'
 alias f='find . -name'
 
+#Mac
+alias tw='networksetup -setairportpower en0 off; networksetup -setairportpower en0 on;'
+alias pg='ping google.com'
+alias javac='javac *.java'
+alias rmclass='rm *.class'
+
 # Git
 alias gg='git status'
 alias gb='git branch -va'
 alias gcm='git commit -m'
 alias gf='git fetch'
-alias gp='git pull'
+alias gp='git push'
 alias changes='git diff --numstat --shortstat start'
 alias standup='git log --since yesterday --author `git config user.email` --pretty=short'
 
 # Bundler
 alias be='bundle exec'
+alias bi='bundle install'
 alias rake='be rake'
 
 # Rspec
@@ -94,12 +101,6 @@ prompt() {
     branch=$(git branch | awk '/^\*/ { print $2 }')
   else
     unset branch
-  fi
-  local driver
-  if test -n "$DRIVER" ; then
-    driver="$LIGHT_BLUE($DRIVER)"
-  else
-    driver="${RED}NO DRIVER"
   fi
   PS1="${YELLOW}\d \@ ${GREEN}\u@\h ${branch:+$LIGHT_BLUE$branch }${CYAN}\w${GRAY}
 $ "
